@@ -54,19 +54,19 @@ If the user asks for a single quick snippet rather than a full feature, it is fi
 
 ## Core Rules
 
-**iOS 26 / macOS 26 is the default deployment target.** The Foundation Models framework requires Apple Intelligence-capable hardware.
+**iOS 26 / macOS 26 is the default deployment target.**
 
-**Target Swift 6.2+ with strict concurrency.** All LanguageModelSession calls are async and must be awaited correctly.
+**Target Swift 6.2+ with strict concurrency.**
 
-**Isolate LanguageModelSession to the infrastructure layer.** LanguageModelSession and all FoundationModels types belong exclusively in infrastructure adapters. Never let them leak into domain models, use-case coordinators, or view models — doing so couples your domain logic to Apple's framework and makes unit testing impossible without a physical Apple Intelligence device.
+**Isolate LanguageModelSession to the infrastructure layer.** Never in domain models, use-case coordinators, or view models.
 
-**Depend on protocols, not on LanguageModelSession directly.** Every AI integration the use-case layer touches should be expressed behind a protocol. This enables dependency injection, makes the feature testable with simple stubs, and keeps the door open if the backing implementation ever changes (e.g., a cloud fallback).
+**Depend on protocols, not on LanguageModelSession directly.** Every AI integration the use-case layer touches must be behind a protocol.
 
-**Use @Generable and @Guide for all structured output.** Never parse free-form LLM text in production code. The model's phrasing is non-deterministic and will break string-based parsing across OS updates, locale changes, or minor prompt tweaks. Constrained decoding with @Generable guarantees the shape of the output at the type level.
+**Use @Generable and @Guide for all structured output.** Never parse free-form LLM text.
 
-**Prefer on-device capabilities.** Do not introduce third-party AI frameworks or cloud LLM SDKs without asking the user first. The Foundation Models framework is designed for privacy-preserving, low-latency, on-device generation.
+**Do not introduce third-party AI frameworks or cloud LLM SDKs** without asking the user first.
 
-**One type per file, feature-based folders.** When adding Foundation Models integration, place infrastructure adapters, domain protocols/models, and presentation-layer view models in separate files and folders. This keeps the boundary between layers visible and enforced by file structure rather than convention alone.
+**One type per file, feature-based folders.**
 
 ## Output Format
 
