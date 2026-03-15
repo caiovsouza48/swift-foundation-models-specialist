@@ -1,9 +1,5 @@
 # Availability
 
-## The Model Is Not Always Available
-
-Foundation Models require Apple Intelligence-capable hardware and a supported OS. Never assume the model is available — always gate before use.
-
 ## Checking Availability
 
 ```swift
@@ -40,8 +36,6 @@ func handleUnavailable(reason: SystemLanguageModel.Availability.UnavailableReaso
 ```
 
 ## Design Fallbacks for Every AI Feature
-
-Every feature powered by Foundation Models must have a non-AI fallback. AI capability is an enhancement, not a requirement — users on older hardware or with Apple Intelligence disabled still need a working app.
 
 ```swift
 var body: some View {

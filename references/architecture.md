@@ -2,8 +2,6 @@
 
 ## The Three-Layer Rule
 
-Foundation Models code must respect a strict three-layer boundary. The reason is testability and coupling: if business logic imports `FoundationModels`, it becomes untestable without Apple Intelligence hardware and tightly coupled to a non-deterministic vendor dependency that can change behavior with every OS update.
-
 | Layer | Responsibility | May import FoundationModels? |
 |---|---|---|
 | Infrastructure | `LanguageModelSession`, network, disk | YES — exclusively here |
@@ -53,7 +51,7 @@ This boundary is what makes deterministic testing possible — see `references/t
 
 ## Functional Core, Imperative Shell
 
-Domain models must be pure and deterministic. The LLM call is an impure side effect — it belongs in the imperative shell (infrastructure/use-case boundary), not in domain logic. This keeps domain logic testable with simple assertions and no mocking.
+LLM calls are impure side effects — they belong at the infrastructure/use-case boundary, not inside domain logic.
 
 ```swift
 // GOOD: domain model is pure — no async, no FoundationModels import
@@ -72,7 +70,7 @@ func summarizeAndValidate(_ text: String) async throws -> ValidationResult {
 
 ## Command-Query Separation
 
-AI calls that return data are **queries**. They must not mutate state. Mixing side effects into query methods makes behavior unpredictable and harder to test, because callers can't safely retry or cache the result.
+AI calls that return data are **queries** — they must not mutate state.
 
 ```swift
 // BAD: query mutates session history as a side effect AND deletes cache
@@ -94,7 +92,7 @@ func invalidateSummaryCache() {
 
 ## Dependency Inversion at the Composition Root
 
-Never instantiate `FoundationModelsSummaryService` inside a use case or view model. Inject it at the composition root (app entry point or scene setup). This is where the concrete infrastructure type meets the protocol abstraction — nowhere else in the app should know which implementation is in use.
+Inject the concrete infrastructure type at the app entry point or scene setup — nowhere else.
 
 ```swift
 // Composition root (e.g., App struct or Scene)

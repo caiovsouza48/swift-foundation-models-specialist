@@ -2,8 +2,6 @@
 
 ## Instructions vs Prompts — A Hard Boundary
 
-This is the most important security rule in Foundation Models development.
-
 | | Instructions | Prompts |
 |---|---|---|
 | **Author** | Developer only | Developer + user input |
@@ -192,16 +190,12 @@ Prompt for what the model is good at. Use Tool Calling (see `references/tool-cal
 
 ## Prompt Verbosity and Token Cost
 
-Every token in instructions and prompts adds latency. Keep instructions concise — say more with fewer words.
+Every token in instructions adds latency. Keep them concise.
 
 ```swift
-// Verbose — unnecessary tokens
-instructions: """
-You are a very helpful and friendly assistant that helps users with all of their questions
-about their health and fitness goals and you should always be positive and encouraging
-and supportive in all of your responses to users.
-"""
+// Verbose
+instructions: "You are a very helpful and friendly assistant that helps users with all of their questions about their health and fitness goals and you should always be positive and encouraging..."
 
-// Concise — same intent, lower token cost
+// Concise
 instructions: "You are a positive, encouraging health and fitness assistant."
 ```

@@ -77,8 +77,6 @@ let session = LanguageModelSession {
 }
 ```
 
-The builder form is syntactic sugar — both forms produce equivalent instructions.
-
 ## Instructions vs Prompts
 
 Instructions are the developer's voice. Prompts are user input. Never mix them — the model is trained to obey instructions over prompts, which provides a layer of defense against prompt injection.
@@ -99,8 +97,6 @@ let session = LanguageModelSession(
 > Source: WWDC25 Session 286 — "Meet the Foundation Models framework": "Instructions should come from you, the developer, while prompts can come from the user."
 
 ## Multi-Turn Conversations
-
-Sessions are stateful. Each call appends to the transcript. The model sees all prior exchanges.
 
 ```swift
 let session = LanguageModelSession(instructions: "You are a travel assistant.")

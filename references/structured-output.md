@@ -1,8 +1,8 @@
 # Structured Output
 
-## Why @Generable, Not Free-Form Text
+## @Generable — Constrained Decoding
 
-Never parse LLM text output with string splitting, regex, or manual JSON decoding in production code. The model's phrasing changes across OS updates and temperature settings. `@Generable` uses constrained decoding — the model physically cannot generate output that violates your Swift type.
+Never parse LLM text output. `@Generable` uses constrained decoding — the model physically cannot generate output that violates your Swift type.
 
 ```swift
 // BAD: fragile text parsing
@@ -141,7 +141,7 @@ struct TripItinerary {
 
 ## Nested @Generable Types
 
-Compose complex structures from smaller `@Generable` types. Each nested type must also carry the macro.
+Each nested type must also carry the `@Generable` macro.
 
 ```swift
 @Generable

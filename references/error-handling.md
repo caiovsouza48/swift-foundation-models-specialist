@@ -1,9 +1,5 @@
 # Error Handling
 
-## LLM-Specific Errors Are Not Optional
-
-Foundation Models introduces failure modes that don't exist in conventional code. All error categories must be handled explicitly. Silent failures in AI features erode user trust quickly.
-
 ## GenerationError — Complete Reference
 
 `LanguageModelSession.GenerationError` is the primary error type. All cases carry an associated `Context` value with `debugDescription` and `underlyingErrors` properties.
@@ -23,8 +19,6 @@ Foundation Models introduces failure modes that don't exist in conventional code
 ## Primary Error Categories
 
 ### 1. Guardrail Violation
-
-The model refuses to respond because the prompt or context triggers a safety filter.
 
 ```swift
 do {
@@ -108,8 +102,6 @@ private func summarizeHistory(_ transcript: Transcript) async throws -> String {
 
 ### 3. Unsupported Language or Locale
 
-The model does not support the current device language or locale.
-
 ```swift
 do {
     response = try await session.respond(to: prompt)
@@ -122,8 +114,6 @@ Check `SystemLanguageModel.default.supportedLanguages` at feature initialisation
 
 ### 4. Assets Unavailable
 
-The model assets have not been downloaded or are still being prepared.
-
 ```swift
 catch LanguageModelSession.GenerationError.assetsUnavailable {
     state = .modelNotReady
@@ -132,8 +122,6 @@ catch LanguageModelSession.GenerationError.assetsUnavailable {
 ```
 
 ### 5. Decoding Failure
-
-Structured output could not be decoded into the target `@Generable` type. This can happen with complex schemas or dynamic schemas that do not match the model's output.
 
 ```swift
 catch LanguageModelSession.GenerationError.decodingFailure {
@@ -144,8 +132,6 @@ catch LanguageModelSession.GenerationError.decodingFailure {
 
 ### 6. Rate Limited
 
-Too many requests in a short period. Back off and retry.
-
 ```swift
 catch LanguageModelSession.GenerationError.rateLimited {
     state = .retrying
@@ -155,8 +141,6 @@ catch LanguageModelSession.GenerationError.rateLimited {
 ```
 
 ### 7. Unsupported Guide
-
-A `@Guide` constraint is not supported by the current model version.
 
 ```swift
 catch LanguageModelSession.GenerationError.unsupportedGuide {
