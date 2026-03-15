@@ -1,0 +1,10 @@
+interface:
+  display_name: "Swift Foundation Models Specialist"
+  short_description: "Reviews and writes Swift code that integrates Apple's Foundation Models framework."
+  icon_small: "./assets/swift-foundation-models-specialist-icon.png"
+  icon_large: "./assets/swift-foundation-models-specialist-icon.png"
+  brand_color: "#F05138"
+  default_prompt: "Use $swift-foundation-models-specialist to review my Foundation Models code."
+
+policy:
+  allow_implicit_invocation: true

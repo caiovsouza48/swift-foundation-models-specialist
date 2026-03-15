@@ -1,0 +1,44 @@
+{
+  "skill_name": "swift-foundation-models-specialist",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Review this Swift code for my iOS 26 app — I put the LanguageModelSession directly in the ViewModel and I'm not sure if that's fine:\n\n```swift\nimport SwiftUI\nimport FoundationModels\n\n@Observable\n@MainActor\nfinal class RecipeViewModel {\n    var recipes: [Recipe] = []\n    private let session = LanguageModelSession(\n        instructions: \"You are a recipe assistant. The user's name is \\(userName).\"\n    )\n\n    func generateRecipes(for ingredient: String) async {\n        let response = try? await session.respond(to: ingredient)\n        guard let content = response?.content else { return }\n        let lines = content.split(separator: \"\\n\").map(String.init)\n        recipes = lines.map { Recipe(name: $0) }\n    }\n}\n```",
+      "expected_output": "A review identifying: (1) LanguageModelSession in the ViewModel violates the infrastructure boundary, (2) user input (userName) embedded in instructions is a prompt injection risk, (3) free-form text parsing instead of @Generable is fragile, (4) try? silently swallows errors. Each finding should include a before/after code fix.",
+      "files": [],
+      "assertions": [
+        "The review flags that LanguageModelSession must not be in the ViewModel",
+        "The review flags that userName embedded in instructions is a prompt injection risk",
+        "The review flags that split/map text parsing should be replaced with @Generable",
+        "The review flags that try? silently swallows LLM-specific errors",
+        "Each finding includes a concrete before/after Swift code fix",
+        "The review ends with a prioritized summary"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Can you review this availability check I wrote for my on-device AI feature? Trying to figure out if I'm handling all the cases correctly:\n\n```swift\nimport FoundationModels\nimport SwiftUI\n\n@Observable\n@MainActor\nfinal class SummaryViewModel {\n    var isAIAvailable = false\n\n    func checkAvailability() {\n        if case .available = SystemLanguageModel.default.availability {\n            isAIAvailable = true\n        }\n    }\n\n    func summarize(_ text: String) async throws -> String {\n        let session = LanguageModelSession(instructions: \"Summarize concisely.\")\n        return try await session.respond(to: text).content\n    }\n}\n```",
+      "expected_output": "A review identifying: (1) availability check doesn't handle .modelNotReady (transient) vs .deviceNotEligible (permanent) differently, (2) a new LanguageModelSession is created on every summarize() call instead of being reused, (3) no prewarm() call. With before/after fixes.",
+      "files": [],
+      "assertions": [
+        "The review flags that .modelNotReady is transient and should trigger a retry, unlike .deviceNotEligible which is permanent",
+        "The review flags that a new LanguageModelSession is created on every call instead of being reused",
+        "The review recommends prewarm() to reduce first-token latency",
+        "Each finding includes a before/after Swift code fix"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I'm building a fitness app that uses Foundation Models to generate workout plans. Here's my infrastructure adapter — does this look right?\n\n```swift\nimport FoundationModels\nimport Foundation\n\nfinal class WorkoutPlanService {\n    private var session = LanguageModelSession(\n        instructions: \"You are a fitness coach. Generate structured workout plans.\"\n    )\n\n    func generatePlan(for goal: String) async throws -> WorkoutPlan {\n        let response = try await session.respond(\n            to: goal,\n            generating: WorkoutPlan.self\n        )\n        return response.content\n    }\n}\n\n@Generable\nstruct WorkoutPlan {\n    var title: String\n    var summary: String\n    var exercises: [Exercise]\n    var warmup: String\n    var cooldown: String\n    var estimatedCalories: Double\n    var difficultyRating: Double\n    var historicalBackground: String\n}\n```",
+      "expected_output": "A review identifying: (1) no error handling for guardrailViolation, exceededContextWindowSize, or unsupportedLanguageOrLocale, (2) WorkoutPlan has unused/unnecessary properties (historicalBackground, difficultyRating) that cost tokens without adding value, (3) no @Guide constraints on any property, (4) summary placed before exercises hurts output quality (property ordering). With before/after fixes.",
+      "files": [],
+      "assertions": [
+        "The review flags missing error handling for LLM-specific errors (guardrailViolation, exceededContextWindowSize)",
+        "The review flags that historicalBackground and difficultyRating are unnecessary properties that cost tokens",
+        "The review recommends adding @Guide constraints to at least one property",
+        "The review mentions that property ordering affects generation quality (summary should come after content it summarizes)",
+        "Each finding includes a before/after Swift code fix"
+      ]
+    }
+  ]
+}
