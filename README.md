@@ -80,21 +80,21 @@ The skill is activated automatically when the agent detects relevant keywords (`
 
 ## Benchmark
 
-Evaluated using the [Claude skill-creator skill](https://github.com/anthropics/skills/tree/main/skills/skill-creator) against 3 test cases (architecture, availability, error handling) comparing with-skill vs. without-skill runs on `claude-sonnet-4-6`.
+Evaluated using the [Claude skill-creator skill](https://github.com/anthropics/skills/tree/main/skills/skill-creator) against 3 test cases (architecture, availability, error handling) comparing with-skill vs. without-skill runs on `claude-sonnet-4-6`. Two iterations run — iteration 2 confirmed stability after trimming redundant prose from Core Rules and reference files.
 
 | | With Skill | Without Skill |
 |---|---|---|
-| **Score** | 13 / 15 | 7 / 15 |
-| **Pass Rate** | **86.7%** | **46.7%** |
-| **Lift** | **+40 pp** | — |
+| **Score** | 13 / 15 | 6–7 / 15 |
+| **Pass Rate** | **86.7%** | **~43%** |
+| **Lift** | **+44 pp** | — |
 
 | Eval | With Skill | Without Skill |
 |---|---|---|
 | Architecture & Injection | 6 / 6 (100%) | 4 / 6 (67%) |
 | Availability & Session | 3 / 4 (75%) | 1 / 4 (25%) |
-| Error Handling & @Generable | 4 / 5 (80%) | 2 / 5 (40%) |
+| Error Handling & @Generable | 4 / 5 (80%) | 1–2 / 5 (20–40%) |
 
-Key findings: without the skill, the model treats `LanguageModelSession` in a ViewModel as a trade-off rather than a rule violation, invents non-existent API names (`LanguageModelError`, `.downloading`), and misses property-ordering's impact on generation quality entirely.
+Key findings: without the skill, the model treats `LanguageModelSession` in a ViewModel as a trade-off rather than a rule violation, invents non-existent API names (`LanguageModelError`, `.downloading`), and misses property-ordering's impact on generation quality entirely. The skill score was stable across both iterations — trimming had no negative impact.
 
 ## Core Rules
 
