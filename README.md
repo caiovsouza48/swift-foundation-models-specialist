@@ -36,7 +36,7 @@ This skill follows the [Agent Skills](https://agentskills.io) open format and wo
 
 **One-line install (recommended)**
 ```bash
-npx skills add https://github.com/caiovsouza48/swift-foundation-models-specialist
+npx skills add caiovsouza48/swift-foundation-models-specialist
 ```
 
 The CLI will prompt you to select your agent (Claude Code, Cursor, Codex, Gemini, etc.) and whether to install globally or per-project.
